@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {POSITION, GRAVITY, BIRD_JUMP} from '../../constants/constants'
+import {BIRD_INITIAL_POSITION, GRAVITY, BIRD_JUMP} from '../../constants/constants'
 
-const initialState = POSITION
+const initialState = BIRD_INITIAL_POSITION
 
 export const birdPositionSlice = createSlice({
     name: 'birdPosition',
     initialState:{ value: initialState },
     reducers:{
-        updatePosition:(state, action) => {
-            state.value = action.payload
+        initialBirdPosition:(state) => {
+            state.value = BIRD_INITIAL_POSITION
         },
         gravityEffect:(state) => {
             state.value = state.value + GRAVITY
@@ -19,6 +19,6 @@ export const birdPositionSlice = createSlice({
     }
 })
 
-export const {updatePosition, gravityEffect, jump} = birdPositionSlice.actions
+export const {initialBirdPosition, gravityEffect, jump} = birdPositionSlice.actions
 
 export default birdPositionSlice.reducer;

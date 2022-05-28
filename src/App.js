@@ -16,10 +16,10 @@ import GameContainer from './components/game_components/GameContainer';
 //Redux
 import {useSelector} from 'react-redux'
 import {useDispatch} from 'react-redux'
-import {updatePosition, gravityEffect, jump} from './components/stores/birdPosition';
-
+import {initialBirdPosition, gravityEffect, jump} from './components/stores/birdPosition';
+import { initialBlockConfig, blockAtEndOfWorld, updateBlockPosition } from './components/stores/blockConfig';
 //Constants
-import {GAME_WIDTH, GAME_HEIGHT, BLOCK_HEIGHT, BLOCK_WIDTH, HOLE, POSITION,  GRAVITY} from './constants/constants'
+import {GAME_WIDTH, GAME_HEIGHT, BLOCK_HEIGHT, BLOCK_WIDTH, HOLE} from './constants/constants'
 
 function App() {
   //Game
@@ -27,13 +27,13 @@ function App() {
   const [points, setPoints] = useState(0)
   const [gameOver, setGameOver] = useState(false)
   //Block
-  const [blockHeight, setBlockHeight] = useState(BLOCK_HEIGHT)
-  const [blockPosition, setBlockPosition] = useState(GAME_WIDTH-BLOCK_WIDTH)
-  //Bird
-  // const [birdPosition, setBirdPosition] = useState(POSITION)
+  // const [blockHeight, setBlockHeight] = useState(BLOCK_HEIGHT)
+  // const [blockPosition, setBlockPosition] = useState(GAME_WIDTH-BLOCK_WIDTH)
 
   //redux
+  //Bird
   const birdPosition = useSelector((state)=> state.bird.value);
+  const blockConfig = useSelector((state)=> state.block.value);
   const dispatch = useDispatch();
 
   //Block movement
@@ -41,13 +41,11 @@ function App() {
     let blockPositionId
     if(gameStarted && !gameOver){
       blockPositionId = setInterval(()=>{
-        if(blockPosition < -45){
-          let newHeight = Math.random() * (550 - 100) + 100
-          setBlockHeight(newHeight)
-          setBlockPosition(GAME_WIDTH)
+        if(blockConfig.blockPosition < -45){
+          dispatch(blockAtEndOfWorld())
           setPoints(prev => prev + 1)
         }else{
-          setBlockPosition(value => value - 7)
+          dispatch(updateBlockPosition())
         }
       }, 24)
     }
@@ -61,23 +59,22 @@ function App() {
     let birdPositionId
     if(gameStarted && !gameOver){
       birdPositionId = setInterval(()=>{
-        // setBirdPosition(prev => prev + GRAVITY)
         dispatch(gravityEffect())
       }, 24)
     }
     return () => {
       clearInterval(birdPositionId)
     }
-  })
+  }, [birdPosition, gameStarted, gameOver])
 
   //Collision
   useEffect(()=>{
-    const hasColliedWithTopObstacle =  birdPosition >= 0 && birdPosition < blockHeight;
-    const hasColliedWithBottomObstacle =  birdPosition <= GAME_HEIGHT && birdPosition >= blockHeight + HOLE ;
+    const hasColliedWithTopObstacle =  birdPosition >= 0 && birdPosition < blockConfig.blockHeight;
+    const hasColliedWithBottomObstacle =  birdPosition <= GAME_HEIGHT && birdPosition >= blockConfig.blockHeight + HOLE ;
     const birdHasCrashed = birdPosition > GAME_HEIGHT;
     
-    if(blockPosition >=0 &&
-      blockPosition <= BLOCK_WIDTH &&
+    if(blockConfig.blockPosition >=0 &&
+      blockConfig.blockPosition <= BLOCK_WIDTH &&
       (hasColliedWithTopObstacle || hasColliedWithBottomObstacle)
       ){
         setGameStart(()=>false)
@@ -93,10 +90,8 @@ function App() {
       setPoints(()=>0)
       setGameStart(prev=> !prev)
       setGameOver(()=>false)
-      setBlockHeight(()=>BLOCK_HEIGHT)
-      setBlockPosition(()=>GAME_WIDTH-BLOCK_WIDTH)
-      // setBirdPosition(()=>POSITION)
-      dispatch(updatePosition(POSITION))
+      dispatch(initialBlockConfig())
+      dispatch(initialBirdPosition())
     }
   }
 
@@ -126,9 +121,9 @@ function App() {
   return (
     <GameContainer>
       <Game onClick = {birdJump}>
-        <UpperBlock height={blockHeight} position={blockPosition}/>
+        <UpperBlock height={blockConfig.blockHeight} position={blockConfig.blockPosition}/>
         <Bird position={birdPosition}/>
-        <BottomBlock height={blockHeight} position={blockPosition}/>
+        <BottomBlock height={blockConfig.blockHeight} position={blockConfig.blockPosition}/>
         {gameOverScreen()}
       </Game>
     </GameContainer>
