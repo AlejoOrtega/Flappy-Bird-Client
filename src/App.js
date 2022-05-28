@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 
 //CSS
 import './App.css';
-import styled from "styled-components"
 
 //Components
 import UpperBlock from './components/game_components/UpperBlock'
@@ -18,22 +17,26 @@ import {useSelector} from 'react-redux'
 import {useDispatch} from 'react-redux'
 import {initialBirdPosition, gravityEffect, jump} from './components/stores/birdPosition';
 import { initialBlockConfig, blockAtEndOfWorld, updateBlockPosition } from './components/stores/blockConfig';
+import {initialPoints, addPoints} from './components/stores/points';
+import { changeGameState, playerHasLost } from './components/stores/gameState';
 //Constants
-import {GAME_WIDTH, GAME_HEIGHT, BLOCK_HEIGHT, BLOCK_WIDTH, HOLE} from './constants/constants'
+import { GAME_HEIGHT, BLOCK_WIDTH, HOLE} from './constants/constants'
 
 function App() {
   //Game
-  const [gameStarted, setGameStart] = useState(false)
-  const [points, setPoints] = useState(0)
-  const [gameOver, setGameOver] = useState(false)
-  //Block
-  // const [blockHeight, setBlockHeight] = useState(BLOCK_HEIGHT)
-  // const [blockPosition, setBlockPosition] = useState(GAME_WIDTH-BLOCK_WIDTH)
+  // const [gameStarted, setGameStart] = useState(false)
+  // const [points, setPoints] = useState(0)
+  // const [gameOver, setGameOver] = useState(false)
 
   //redux
+  //GameState
+  const {gameStarted, gameOver} =  useSelector(state => state.game.value)
+  //Points
+  const points =  useSelector(state => state.points.value);
   //Bird
   const birdPosition = useSelector((state)=> state.bird.value);
-  const blockConfig = useSelector((state)=> state.block.value);
+  //Block
+  const  {blockHeight, blockPosition} = useSelector((state)=> state.block.value);
   const dispatch = useDispatch();
 
   //Block movement
@@ -41,9 +44,9 @@ function App() {
     let blockPositionId
     if(gameStarted && !gameOver){
       blockPositionId = setInterval(()=>{
-        if(blockConfig.blockPosition < -45){
+        if(blockPosition < -45){
           dispatch(blockAtEndOfWorld())
-          setPoints(prev => prev + 1)
+          dispatch(addPoints())
         }else{
           dispatch(updateBlockPosition())
         }
@@ -52,7 +55,7 @@ function App() {
     return () => {
       clearInterval(blockPositionId)
     }
-  })
+  }, [gameStarted, gameOver, blockPosition])
 
   //Bird movement
   useEffect(()=>{
@@ -69,27 +72,38 @@ function App() {
 
   //Collision
   useEffect(()=>{
-    const hasColliedWithTopObstacle =  birdPosition >= 0 && birdPosition < blockConfig.blockHeight;
-    const hasColliedWithBottomObstacle =  birdPosition <= GAME_HEIGHT && birdPosition >= blockConfig.blockHeight + HOLE ;
+    const hasColliedWithTopObstacle =  birdPosition >= 0 && birdPosition < blockHeight;
+    const hasColliedWithBottomObstacle =  birdPosition <= GAME_HEIGHT && birdPosition >= blockHeight + HOLE ;
     const birdHasCrashed = birdPosition > GAME_HEIGHT;
     
-    if(blockConfig.blockPosition >=0 &&
-      blockConfig.blockPosition <= BLOCK_WIDTH &&
+    if(blockPosition >=0 &&
+      blockPosition <= BLOCK_WIDTH &&
       (hasColliedWithTopObstacle || hasColliedWithBottomObstacle)
       ){
-        setGameStart(()=>false)
-        setGameOver(()=>true)
+        // setGameStart(()=>false)
+        // setGameOver(()=>true)
+
+        dispatch(changeGameState(false))
+        dispatch(playerHasLost(true))
       }else if (birdHasCrashed){
-        setGameStart(()=>false)
-        setGameOver(()=>true)
+        // setGameStart(()=>false)
+        // setGameOver(()=>true)
+
+        dispatch(changeGameState(false))
+        dispatch(playerHasLost(true))
       }
-  })
+  }, [birdPosition])
 
   const startGame = () => {
     if(!gameStarted){
-      setPoints(()=>0)
-      setGameStart(prev=> !prev)
-      setGameOver(()=>false)
+
+      dispatch(changeGameState(true))
+      dispatch(playerHasLost(false))
+      
+      // setGameStart(prev=> !prev)
+      // setGameOver(()=>false)
+
+      dispatch(initialPoints())
       dispatch(initialBlockConfig())
       dispatch(initialBirdPosition())
     }
@@ -121,9 +135,9 @@ function App() {
   return (
     <GameContainer>
       <Game onClick = {birdJump}>
-        <UpperBlock height={blockConfig.blockHeight} position={blockConfig.blockPosition}/>
+        <UpperBlock height={blockHeight} position={blockPosition}/>
         <Bird position={birdPosition}/>
-        <BottomBlock height={blockConfig.blockHeight} position={blockConfig.blockPosition}/>
+        <BottomBlock height={blockHeight} position={blockPosition}/>
         {gameOverScreen()}
       </Game>
     </GameContainer>
