@@ -112,7 +112,7 @@ const GameView = () => {
     if(gameStarted === false){
       return (
         <GameOverScreen>
-            <h1 className="title">{!gameOver?'Welcome' : 'You lost!'}</h1>
+            <h1 className="title">{!gameOver?'Click 2 Go' : 'You lost!'}</h1>
             <h3 className="score">{!gameOver? null : `Score ${points}`}</h3>
             <button onClick={startGame}>{!gameOver? 'Start Playing' : 'Play Again'}</button>
             <div className="backdrop"></div>

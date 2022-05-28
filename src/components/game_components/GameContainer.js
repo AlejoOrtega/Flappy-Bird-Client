@@ -6,7 +6,7 @@ const GameContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: black;
+  background: rgb(0, 160, 214);;
 `
 
 export default GameContainer;

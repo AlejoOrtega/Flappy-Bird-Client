@@ -9,7 +9,13 @@ body {
     overflow: hidden;
     margin: 0;
 }
-
+.form {
+  width: '90%';
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0;
+}
 
 #star {
     background: url('./img/star.png');

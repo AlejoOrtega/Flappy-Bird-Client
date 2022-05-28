@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
+//Router
+import { BrowserRouter} from 'react-router-dom';
+
+//Redux
 import {configureStore} from '@reduxjs/toolkit'
 import {Provider} from 'react-redux'
 import birdReducer from './components/stores/birdPosition';
@@ -21,11 +25,13 @@ const store = configureStore({
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </Provider>
+  <BrowserRouter>
+    <Provider store={store}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </Provider>
+  </BrowserRouter>
 );
 
 
