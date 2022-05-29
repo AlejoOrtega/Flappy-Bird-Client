@@ -74,14 +74,12 @@ const GameView = () => {
       blockPosition <= BLOCK_WIDTH &&
       (hasColliedWithTopObstacle || hasColliedWithBottomObstacle)
       ){
-        // setGameStart(()=>false)
-        // setGameOver(()=>true)
+
 
         dispatch(changeGameState(false))
         dispatch(playerHasLost(true))
       }else if (birdHasCrashed){
-        // setGameStart(()=>false)
-        // setGameOver(()=>true)
+
 
         dispatch(changeGameState(false))
         dispatch(playerHasLost(true))
@@ -101,7 +99,7 @@ const GameView = () => {
   }
 
   const birdJump = () => {
-    // setBirdPosition(prev => prev - 50)
+
     if(gameStarted && !gameOver){
       dispatch(jump())
     }

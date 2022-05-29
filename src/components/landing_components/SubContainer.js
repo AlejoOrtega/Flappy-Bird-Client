@@ -11,7 +11,7 @@ flex-direction: column;
 align-items: center;
 justify-content: space-around;
 
-background: black;
+background: rgb(0,0,0, .7);
 background-position: center;
 background-size: cover;
 background-repeat: no-repeat;
