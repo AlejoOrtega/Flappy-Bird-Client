@@ -1,30 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Input from '../Input';
 import Button from '../Button';
 import Title from '../Title';
+import ErrorText from '../ErrorText';
 
-import {useNavigate} from 'react-router-dom'
 
-const RegisterForm = ({setIsLogIn}) => {
-
-    const {username, password, repeatPassword} = ''
-    const navigate = useNavigate()
-
-    const onChangeForm = () => {
-
-    }
-
-    const onSubmitForm = () => {
-        navigate('game')
-    }
+const RegisterForm = ({formData, errorStatus, errorMessage, onSubmitForm, setIsLogIn, onChangeForm}) => {
 
     return ( 
     <>
         <Title> Register </Title>
-        <form className='form' onSubmit={onSubmitForm}>
-            <Input name='username' type='text' placeholder='username' value={username} onChange={onChangeForm}/>
-            <Input name='password' type='password' placeholder='password' value={password} onChange={onChangeForm}/>
-            <Input name='repeatPassword' type='password' placeholder='repeat password' value={repeatPassword} onChange={onChangeForm}/>
+        <form className='form' onSubmit={(e)=>onSubmitForm(e, true)}>
+            <Input name='username' type='text' placeholder='username' value={formData.username} onChange={onChangeForm}/>
+            <Input name='password' type='password' placeholder='password' value={formData.password} onChange={onChangeForm}/>
+            <Input name='repeatPassword' type='password' placeholder='repeat password' value={formData.repeatPassword} onChange={onChangeForm}/>
+            {!errorStatus? null : <ErrorText>{errorMessage}</ErrorText>}
             <Button>Submit</Button>
         </form>
         <Button onClick={()=>setIsLogIn(prev=> !prev)}>Back</Button>

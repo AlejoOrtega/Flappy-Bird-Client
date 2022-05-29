@@ -12,13 +12,15 @@ import birdReducer from './components/stores/birdPosition';
 import blockReducer from './components/stores/blockConfig';
 import pointsReducer from './components/stores/points';
 import gameReducer from './components/stores/gameState';
+import userReducer from './components/stores/user'
 
 const store = configureStore({
   reducer: {
     bird : birdReducer,
     block : blockReducer,
     points: pointsReducer,
-    game : gameReducer
+    game : gameReducer,
+    user : userReducer
   }
 })
 
