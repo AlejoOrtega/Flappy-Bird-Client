@@ -1,13 +1,13 @@
 import styled from "styled-components"
 
 const Score = styled.div`
-position: fixed;
+position: absolute;
 top: 20px;
-left: 20px;
-color: white;
+left: 50%;
+color: yellow;
 font-family: "PixelarRegularW01-Regular";
-font-size: 30px;
-font-weight: normal;
+font-size: 84px;
+font-weight: bold;
 `
 
 export default Score;

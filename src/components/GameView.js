@@ -16,8 +16,12 @@ import {initialBirdPosition, gravityEffect, jump} from './stores/birdPosition';
 import { initialBlockConfig, blockAtEndOfWorld, updateBlockPosition } from './stores/blockConfig';
 import {initialPoints, addPoints} from './stores/points';
 import { changeGameState, playerHasLost } from './stores/gameState';
+
 //Constants
 import { GAME_HEIGHT, BLOCK_WIDTH, HOLE} from '../constants/constants'
+
+//Navigation
+import { useNavigate } from 'react-router-dom';
 
 
 const GameView = () => {
@@ -30,7 +34,16 @@ const GameView = () => {
     const birdPosition = useSelector((state)=> state.bird.value);
     //Block
     const  {blockHeight, blockPosition} = useSelector((state)=> state.block.value);
+    //User
+    const {id, username} = useSelector((state)=> state.user.value)
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+      if(username === ''){
+        navigate('/')
+      }
+    },[username])
 
     //useEffect Game Movement ---------------------------
     //Block movement
@@ -120,17 +133,22 @@ const GameView = () => {
       return <Score> {points} </Score>
     }
   }
-
-    return ( 
-        <GameContainer>
-            <Game onClick = {birdJump}>
-                <UpperBlock height={blockHeight} position={blockPosition}/>
-                <Bird position={birdPosition}/>
-                <BottomBlock height={blockHeight} position={blockPosition}/>
-                {gameOverScreen()}
-            </Game>
-        </GameContainer>
-     );
+    {
+      if(username === ''){
+        return <></>
+      }else{
+        return ( 
+          <GameContainer>
+              <Game onClick = {birdJump}>
+                  <UpperBlock height={blockHeight} position={blockPosition}/>
+                  <Bird position={birdPosition}/>
+                  <BottomBlock height={blockHeight} position={blockPosition}/>
+                  {gameOverScreen()}
+              </Game>
+          </GameContainer>
+       );
+      }
+    }
 }
  
 export default GameView;
