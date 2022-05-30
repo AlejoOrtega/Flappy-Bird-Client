@@ -8,6 +8,7 @@ import Bird from './game_components/Bird'
 import GameOverScreen from './game_components/GameOverScreen';
 import Score from './game_components/Score';
 import GameContainer from './game_components/GameContainer';
+import Button from './game_components/Button';
 
 //Redux
 import {useSelector} from 'react-redux'
@@ -16,6 +17,7 @@ import {initialBirdPosition, gravityEffect, jump} from './stores/birdPosition';
 import { initialBlockConfig, blockAtEndOfWorld, updateBlockPosition } from './stores/blockConfig';
 import {initialPoints, addPoints} from './stores/points';
 import { changeGameState, playerHasLost } from './stores/gameState';
+import { logOut } from './stores/user';
 
 //Constants
 import { GAME_HEIGHT, BLOCK_WIDTH, HOLE} from '../constants/constants'
@@ -111,6 +113,11 @@ const GameView = () => {
     }
   }
 
+  const onLogOut = () => {
+    dispatch(logOut())
+    navigate('/')
+  }
+
   const birdJump = () => {
 
     if(gameStarted && !gameOver){
@@ -123,9 +130,16 @@ const GameView = () => {
     if(gameStarted === false){
       return (
         <GameOverScreen>
-            <h1 className="title">{!gameOver?'Click 2 Go' : 'You lost!'}</h1>
+            <h1 className="title">{!gameOver?'Welcome' : 'You lost!'}</h1>
             <h3 className="score">{!gameOver? null : `Score ${points}`}</h3>
-            <button onClick={startGame}>{!gameOver? 'Start Playing' : 'Play Again'}</button>
+            <div className='buttons'>
+              <Button color='white' textColor='black' onClick={startGame}>{!gameOver? 'Start Playing' : 'Play Again'}</Button>
+              <Button color='#92B4EC' textColor='black'>Leader Board</Button>
+              <Button color='#F9D923' textColor='black'>User Settings</Button>
+              <br/>
+              <Button color='#EB5353' textColor='white' onClick={onLogOut}>Log out</Button>
+            </div>
+            
             <div className="backdrop"></div>
         </GameOverScreen>
       )

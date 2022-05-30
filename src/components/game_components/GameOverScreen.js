@@ -15,11 +15,10 @@ left: 0;
 }
 & .title, 
 & .score,
-& button {
+& .buttons{
   position: absolute;
   z-index: 1;
   left: calc(50% - 102px);
-  top: 40%;
   width: 205px;
   text-align: center;
   color: rgb(255, 255, 74);
@@ -27,19 +26,20 @@ left: 0;
   font-weight: normal;
 }
 & .title {
-  margin-top: -65px;
+  margin-top: -35px;
   font-size: 55px;
+  top: 30%;
 }
 & .score {
   font-size: 30px;
+  top: 35%;
 }
-& button {
-  margin-top: 50px;
-  font-size: 24px;
-  color: black;
-  padding: 5px 25px;
-  cursor: pointer;
-  border: 0;
+& .buttons {
+  top: 40%;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 `
 
