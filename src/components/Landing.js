@@ -54,7 +54,7 @@ const Landing = () => {
         let response  = await postLoginResponse({username: formData.username, password: formData.password})
         
         if(response !== false){
-            dispatch(setUserInfo(response))
+            dispatch(setUserInfo(response[0]))
             navigate('game')
         }else{
             setErrorStatus(()=>true)
@@ -68,7 +68,6 @@ const Landing = () => {
             setErrorMessage(errorMessages.passwordsNotMatch)
         }else{
             let response = await postCreateNewUser({username: formData.username, password: formData.password}) 
-            console.log(response)
             if(response !== false){
                 dispatch(setUserInfo(response))
                 navigate('game')

@@ -29,6 +29,7 @@ left: 0;
   margin-top: -35px;
   font-size: 55px;
   top: 30%;
+  color: #F9D923;
 }
 & .score {
   font-size: 30px;

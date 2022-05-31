@@ -2,9 +2,9 @@ import styled from "styled-components"
 
 const ErrorText = styled.div`
     color: red;
-    margin-top: 10px;
+    margin-bottom: 15px;
     font-family: "PixelarRegularW01-Regular";
-    font-size: 28px;
+    font-size: 24px;
     font-weight: normal;
 `
  

@@ -17,6 +17,23 @@ body {
   margin: 10px 0;
 }
 
+.score-table {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  overflow: auto;
+  /* overflow-y: hidden; */
+  padding: 0px 10px;
+}
+.leader-board {
+  display: flex;
+  flex-direction: column;
+  height: 550px;
+  overflow: auto;
+  /* overflow-y: hidden; */
+  padding: 0px 10px;
+}
+
 #star {
     background: url('./img/star.png');
     width: 35px;

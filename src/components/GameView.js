@@ -7,8 +7,8 @@ import Game from './game_components/Game'
 import Bird from './game_components/Bird'
 import GameOverScreen from './game_components/GameOverScreen';
 import Score from './game_components/Score';
-import GameContainer from './game_components/GameContainer';
 import Button from './game_components/Button';
+import Container from './main_components/Container';
 
 //Redux
 import {useSelector} from 'react-redux'
@@ -16,14 +16,17 @@ import {useDispatch} from 'react-redux'
 import {initialBirdPosition, gravityEffect, jump} from './stores/birdPosition';
 import { initialBlockConfig, blockAtEndOfWorld, updateBlockPosition } from './stores/blockConfig';
 import {initialPoints, addPoints} from './stores/points';
-import { changeGameState, playerHasLost } from './stores/gameState';
+import gameState, { changeGameState, playerHasLost } from './stores/gameState';
 import { logOut } from './stores/user';
 
 //Constants
 import { GAME_HEIGHT, BLOCK_WIDTH, HOLE} from '../constants/constants'
 
 //Navigation
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+
+//fetch
+import { postNewScore } from '../fetchs/fetchs';
 
 
 const GameView = () => {
@@ -40,13 +43,6 @@ const GameView = () => {
     const {id, username} = useSelector((state)=> state.user.value)
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    useEffect(()=>{
-      if(username === ''){
-        navigate('/')
-      }
-    },[username])
-
     //useEffect Game Movement ---------------------------
     //Block movement
   useEffect(()=>{
@@ -64,7 +60,7 @@ const GameView = () => {
     return () => {
       clearInterval(blockPositionId)
     }
-  }, [gameStarted, gameOver, blockPosition])
+  }, [gameStarted, gameOver, blockPosition, dispatch])
 
   //Bird movement
   useEffect(()=>{
@@ -77,7 +73,7 @@ const GameView = () => {
     return () => {
       clearInterval(birdPositionId)
     }
-  }, [birdPosition, gameStarted, gameOver])
+  }, [birdPosition, gameStarted, gameOver, dispatch])
 
   //Collision
   useEffect(()=>{
@@ -87,19 +83,19 @@ const GameView = () => {
     
     if(blockPosition >=0 &&
       blockPosition <= BLOCK_WIDTH &&
-      (hasColliedWithTopObstacle || hasColliedWithBottomObstacle)
+      (hasColliedWithTopObstacle || hasColliedWithBottomObstacle) && gameStarted
       ){
-
-
+        postNewScore(id, points)
         dispatch(changeGameState(false))
         dispatch(playerHasLost(true))
-      }else if (birdHasCrashed){
 
+      }else if (birdHasCrashed && gameStarted){
 
+        postNewScore(id, points)
         dispatch(changeGameState(false))
         dispatch(playerHasLost(true))
       }
-  }, [birdPosition])
+  }, [birdPosition, blockHeight, blockPosition, dispatch])
 
   //In Game Functions --------------------------------------------
   const startGame = () => {
@@ -113,7 +109,20 @@ const GameView = () => {
     }
   }
 
+  const onUserSettings = () => {
+    navigate('/user_settings')
+  }
+
+  const onLeaderBoard = () => {
+    navigate('/leader_board')
+  }
+
   const onLogOut = () => {
+    dispatch(changeGameState(false))
+    dispatch(playerHasLost(false))
+    dispatch(initialPoints())
+    dispatch(initialBlockConfig())
+    dispatch(initialBirdPosition())
     dispatch(logOut())
     navigate('/')
   }
@@ -134,10 +143,10 @@ const GameView = () => {
             <h3 className="score">{!gameOver? null : `Score ${points}`}</h3>
             <div className='buttons'>
               <Button color='white' textColor='black' onClick={startGame}>{!gameOver? 'Start Playing' : 'Play Again'}</Button>
-              <Button color='#92B4EC' textColor='black'>Leader Board</Button>
-              <Button color='#F9D923' textColor='black'>User Settings</Button>
+              <Button color='white' textColor='black' onClick={onLeaderBoard}>Leader Board</Button>
+              <Button color='white' textColor='black' onClick={onUserSettings}>User Settings</Button>
               <br/>
-              <Button color='#EB5353' textColor='white' onClick={onLogOut}>Log out</Button>
+              <Button color='#bd0000' textColor='white' onClick={onLogOut}>Log out</Button>
             </div>
             
             <div className="backdrop"></div>
@@ -147,21 +156,19 @@ const GameView = () => {
       return <Score> {points} </Score>
     }
   }
-    {
-      if(username === ''){
-        return <></>
-      }else{
-        return ( 
-          <GameContainer>
-              <Game onClick = {birdJump}>
-                  <UpperBlock height={blockHeight} position={blockPosition}/>
-                  <Bird position={birdPosition}/>
-                  <BottomBlock height={blockHeight} position={blockPosition}/>
-                  {gameOverScreen()}
-              </Game>
-          </GameContainer>
-       );
-      }
+    if(username === ''){
+      return <Navigate replace to='/'/>
+    }else{
+      return ( 
+        <Container>
+            <Game onClick = {birdJump}>
+                <UpperBlock height={blockHeight} position={blockPosition}/>
+                <Bird position={birdPosition}/>
+                <BottomBlock height={blockHeight} position={blockPosition}/>
+                {gameOverScreen()}
+            </Game>
+        </Container>
+      );
     }
 }
  
