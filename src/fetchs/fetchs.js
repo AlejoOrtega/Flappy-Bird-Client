@@ -1,4 +1,4 @@
-const URL_BASE_TEST = 'http://localhost:9292/'
+// const URL_BASE_TEST = 'http://localhost:9292/'
 const URL_BASE = 'https://flappy-bird-sinatra-0.herokuapp.com/'
 
 //GET -----------------------------------------------------

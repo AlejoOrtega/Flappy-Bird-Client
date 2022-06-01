@@ -16,7 +16,7 @@ import {useDispatch} from 'react-redux'
 import {initialBirdPosition, gravityEffect, jump} from './stores/birdPosition';
 import { initialBlockConfig, blockAtEndOfWorld, updateBlockPosition } from './stores/blockConfig';
 import {initialPoints, addPoints} from './stores/points';
-import gameState, { changeGameState, playerHasLost } from './stores/gameState';
+import { changeGameState, playerHasLost } from './stores/gameState';
 import { logOut } from './stores/user';
 
 //Constants
@@ -95,7 +95,7 @@ const GameView = () => {
         dispatch(changeGameState(false))
         dispatch(playerHasLost(true))
       }
-  }, [birdPosition, blockHeight, blockPosition, dispatch])
+  }, [birdPosition, blockHeight, blockPosition, dispatch, gameStarted, id, points])
 
   //In Game Functions --------------------------------------------
   const startGame = () => {

@@ -47,9 +47,6 @@ const StyledTable = styled.table`
     font-weight: bold;
   }
 `;
-export default ({ data }) => (
-  <TableMarkup titles={Object.keys(data[0])} data={data} />
-);
 const TableMarkup = ({ titles, data }) => (
   <StyledTable>
     <colgroup>
@@ -75,3 +72,8 @@ const TableMarkup = ({ titles, data }) => (
     </tbody>
   </StyledTable>
 );
+
+const table = ({ data }) => (
+  <TableMarkup titles={Object.keys(data[0])} data={data} />
+);
+export default table;

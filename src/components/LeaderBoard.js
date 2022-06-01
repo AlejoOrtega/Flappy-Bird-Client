@@ -2,12 +2,8 @@ import React, {useState, useEffect} from 'react';
 import Container from './main_components/Container';
 import Section from './main_components/Section';
 import StyledTable from './main_components/StyledTable';
-import ProfilePicture from './main_components/ProfilePicture';
-import flappyGif from '../img/flappyGif.gif'
 import previous from '../img/left-arrow.png'
 import Content from './main_components/Content';
-import Button from './main_components/Button';
-import Input from './landing_components/Input';
 import { useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { getBestScores } from '../fetchs/fetchs';
@@ -27,7 +23,7 @@ const LeaderBoard = () => {
             let response = await getBestScores()
             
             if(response !== false){
-                response.map((info, index)=>{
+                response.forEach((info, index)=>{
                     info['Top'] = info['id'];
                     info['Top'] = index + 1;
                     delete info['id'];
