@@ -52,7 +52,7 @@ export const postCreateNewUser = (body) => {
 //post new score
 export const postNewScore = (userId, score) => {
     console.log('Im called')
-    return fetch(`${URL_BASE}score`,{
+    return fetch(`${URL_BASE}scores`,{
                 method:'POST',
                 headers:{
                     'Content-Type': 'application/json'
