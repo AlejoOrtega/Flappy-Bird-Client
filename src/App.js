@@ -19,7 +19,6 @@ function App() {
       <Route path='game' element={<GameView/>}/>
       <Route path='user_settings' element={<UserSetting/>}/>
       <Route path='leader_board' element={<LeaderBoard/>}/>
-      
     </Routes>
     
   );

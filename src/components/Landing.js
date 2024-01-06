@@ -6,7 +6,8 @@ import SubContainer from './landing_components/SubContainer';
 import RegisterForm from './landing_components/Forms/RegisterForm';
 import LoginForm from './landing_components/Forms/LogInForm';
 
-import { postLoginResponse, postCreateNewUser } from '../fetchs/fetchs';
+// import { postLoginResponse, postCreateNewUser } from '../fetchs/fetchs';
+import {postCreateNewUser } from '../fetchs/fetchs';
 import { useNavigate } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
@@ -51,15 +52,15 @@ const Landing = () => {
     }
 
     const onLogin = async() => {
-        let response  = await postLoginResponse({username: formData.username, password: formData.password})
+        // let response  = await postLoginResponse({username: formData.username, password: formData.password})
         
-        if(response !== false){
-            dispatch(setUserInfo(response[0]))
+        // if(response !== false){
+            dispatch(setUserInfo({id: 0, username: 'Gosu'}))
             navigate('game')
-        }else{
-            setErrorStatus(()=>true)
-            setErrorMessage(errorMessages.checkCredentials)
-        }
+        // }else{
+        //     setErrorStatus(()=>true)
+        //     setErrorMessage(errorMessages.checkCredentials)
+        // }
     }
 
     const onRegister = async() => {
